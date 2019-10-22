@@ -49,6 +49,8 @@ import java.util.*;
  * Created by GY on 2019/10/18 11:06
  * <p>
  * Created by GY on 2019/10/18 11:06
+ * <p>
+ * Created by GY on 2019/10/18 11:06
  */
 
 /**
@@ -83,8 +85,8 @@ public class GoodsController {
 
     @ApiOperation("默认搜索框")
     @GetMapping(value = "/defaultBox")
-    public String defaultBox( HttpServletRequest request) {
-        String  ip = IpAdrressUtil.getIpAddr(request);
+    public String defaultBox(HttpServletRequest request) {
+        String ip = IpAdrressUtil.getIpAddr(request);
         return goodsService.defaultBox(ip);
     }
 
@@ -270,5 +272,14 @@ public class GoodsController {
         return factionService.newGoods();
     }
 
+
+    @ApiOperation("返回大类")
+    @GetMapping(value = "/Order4")
+    public Map<String, String> lei(int kind) {
+        List<Goods> goods = goodsService.lei(kind);
+        Map<String, String> s = new HashMap<>();
+        s.put(goods.get(0).getGoodsName(), "www.wangyiyanxuan.com");
+        return s;
+    }
 
 }

@@ -116,9 +116,9 @@ public class GoodsServiceImpl implements GoodsService {
     public String defaultBox(String ip) {
 
 
-        redisUtils.set(ip, 1);
+        redisUtils.set(ip, 1,900);
         i = i + Integer.valueOf(redisUtils.get(ip).toString());
-        redisUtils.set(ip, i);
+        redisUtils.set(ip, i,900);
 
         GoodsExample goodsExample = new GoodsExample();
         Long count = goodsMapper.countByExample(goodsExample);
@@ -149,4 +149,10 @@ public class GoodsServiceImpl implements GoodsService {
         return null;
     }
 
+    @Override
+    public List<Goods> lei(int kind) {
+
+        GoodsExample goodsExample = new GoodsExample();
+//      goodsExample.createCriteria().andGoodsKindEqualTo(kind);
+        return goodsMapper.selectByExample(goodsExample);}
 }

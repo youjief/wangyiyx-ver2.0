@@ -53,5 +53,8 @@ public interface GoodsService {
     //默认搜索框
     String defaultBox(String ip);
 
+    //返回大类与地址
+    List<Goods> lei(int kind);
+
 
 }

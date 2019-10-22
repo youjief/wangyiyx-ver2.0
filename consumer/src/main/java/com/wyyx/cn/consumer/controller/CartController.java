@@ -2,6 +2,7 @@ package com.wyyx.cn.consumer.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.wyyx.cn.consumer.config.custom.CurrentUser;
+import com.wyyx.cn.consumer.untils.IpAdrressUtil;
 import com.wyyx.cn.consumer.untils.redis.RedisUtils;
 import com.wyyx.cn.consumer.vo.SumUserVo;
 import com.wyyx.cn.provider.model.Cart;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.Jedis;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,26 +54,37 @@ public class CartController {
 
     private Jedis jedis = null;
 
-    public void init() {
-        jedis = new Jedis("192.168.1.139", 6379);
+    public void init(HttpServletRequest request) {
+        String ipAd = IpAdrressUtil.getIpAddr(request);
+        jedis = new Jedis(ipAd, 6379);
     }
-
 
 
     @ApiOperation(value = "增加购物车redis")
     @GetMapping(value = "/addredis")
     // 添加商品到购物车
-    public void AddItemToCart(String goods_id, int numbers) {
+    public void AddItemToCart(String goods_id, int numbers, HttpServletRequest request) {
 
-        init();
+        init(request);
 
-        jedis.hset("cart:user_local", goods_id, numbers + "");
+        int oldValue = 0;
+        Map<String, String> cart = jedis.hgetAll("cart:user_local");
+        Set<Map.Entry<String, String>> entrySet = cart.entrySet();
+        for (Map.Entry<String, String> ent : entrySet) {
+            if (goods_id.equals(ent.getKey())) {
+                oldValue = Integer.valueOf(ent.getValue());
+            }
+        }
+        int newValue = numbers + oldValue;
+
+        jedis.hset("cart:user_local", goods_id, newValue + "");
 
         jedis.close();
     }
 
     // 遍历购物车信息加入mysql
-    public void GetCartInfo() {
+    public void GetCartInfo(String goods_id, int numbers, HttpServletRequest request) {
+        init(request);
         Map<String, String> cart = jedis.hgetAll("cart:user_local");
         Set<Map.Entry<String, String>> entrySet = cart.entrySet();
         for (Map.Entry<String, String> ent : entrySet) {
@@ -82,20 +95,23 @@ public class CartController {
             cartService.addIntoCart(cart1);
 
         }
+        delItemFromCart(goods_id, request);
         jedis.close();
     }
 
     // 更改购物车
-    public void editCart(String goods_id, int numbers) {
-        init();
-        jedis.hincrBy("cart:user_local", goods_id, 1);
+    @ApiOperation(value = "修改购物车Redis")
+    @GetMapping(value = "/uredis")
+    public void editCart(String goods_id, int numbers, HttpServletRequest request) {
+        init(request);
+        jedis.hincrBy("cart:user_local", goods_id, numbers);
         jedis.close();
     }
 
 
     // 从购物车中删除商品项
-    public void delItemFromCart(String goods_id) {
-        init();
+    public void delItemFromCart(String goods_id, HttpServletRequest request) {
+        init(request);
         jedis.hdel("cart:user_l init();ocal", goods_id);
         jedis.close();
     }
@@ -103,10 +119,10 @@ public class CartController {
 
     @ApiOperation(value = "增加购物车")
     @GetMapping(value = "/add")
-    public boolean add(Goods goods, int numbers, @CurrentUser SumUserVo sumUserVo) {
+    public boolean add(Goods goods, int numbers, @CurrentUser SumUserVo sumUserVo, HttpServletRequest request) {
         //当前没登录的话存redis
-        if (sumUserVo == null) {
-            AddItemToCart(goods.getGoodsId().toString(), numbers);
+        if (sumUserVo.getUserId() == null) {
+            AddItemToCart(goods.getGoodsId().toString(), numbers, request);
             return true;
         } else //增加进mysql
         {
