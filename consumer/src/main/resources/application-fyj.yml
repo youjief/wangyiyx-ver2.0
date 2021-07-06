@@ -1,0 +1,49 @@
+server:
+  port: 8763
+spring:
+  application:
+    name: springcloud-web-consumer
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/demo_wangyi?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+#  activemq:
+#    broker-url: tcp://127.0.0.1:61616
+#    packages:
+#      trust-all: true
+#    password: admin
+#    user: admin
+    redis:
+      host: localhost
+      port: 6379
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+
+#dubbo:
+#  application:
+#    name: consumer
+#  registry:
+#    address: zookeeper://127.0.0.1:2181
+#  scan:
+#    base-packages: com.wyyx.cn.consumer.controller
+
+wx:
+  access_token: https://api.weixin.qq.com/sns/oauth2/access_token?
+  appid: wx30cdaa84ed867151
+  codeUrl: https://open.weixin.qq.com/connect/oauth2/authorize?
+  redirect_uri: https://0fc72adf.ngrok.io/wx/return
+  requserinfo: https://api.weixin.qq.com/sns/userinfo?
+  response_type: code
+  scope: snsapi_userinfo
+  serect: 2994a5244b6451b3cc0bc93cea0c910c
+wxPayConfig:
+  appid: wxab8acb865bb1637e
+  key: 2ab9071b06b9f739b950ddb41db2690d
+  mchid: 11473623
+  notifyurl: http://df57d542.ngrok.io/dubbo-consummer/wx/wxPayNotify
+  type: NATIVE
+  unified: https://api.mch.weixin.qq.com/pay/unifiedorder

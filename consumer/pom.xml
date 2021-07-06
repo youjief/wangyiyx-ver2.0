@@ -79,6 +79,21 @@
             <scope>compile</scope>
         </dependency>
 
+
+        <!--提供向注册中心注册依赖开始-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <!--提供向注册中心注册依赖结束-->
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

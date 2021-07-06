@@ -49,10 +49,6 @@
             <artifactId>junit</artifactId>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>RELEASE</version>
@@ -64,6 +60,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
+
+        <!--提供向注册中心注册依赖开始-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <!--提供向注册中心注册依赖结束-->
 
     </dependencies>
 
