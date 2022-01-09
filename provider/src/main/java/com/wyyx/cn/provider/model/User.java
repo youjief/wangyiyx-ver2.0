@@ -3,6 +3,7 @@ package com.wyyx.cn.provider.model;
 import java.io.Serializable;
 import java.util.Date;
 
+
 public class User implements Serializable {
     private Long userId;
 

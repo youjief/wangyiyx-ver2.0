@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 //开启往注册中心注册
-@EnableEurekaClient
+//@EnableEurekaClient
 @SpringBootApplication
 public class ProviderApplication {
 

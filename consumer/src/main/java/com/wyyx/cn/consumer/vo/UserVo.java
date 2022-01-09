@@ -2,8 +2,11 @@ package com.wyyx.cn.consumer.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -36,6 +39,7 @@ public class UserVo implements Serializable {
     private String sex;
 
     @ApiModelProperty(value = "生日",required = true)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     private String ipAddress;

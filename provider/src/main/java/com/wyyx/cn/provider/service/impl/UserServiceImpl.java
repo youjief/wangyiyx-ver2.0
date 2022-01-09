@@ -240,7 +240,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public int register(User user) {
-        return userMapper.insertSelective(user);
+        int i= userMapper.insertSelective(user);
+        return i;
     }
 
     @Override

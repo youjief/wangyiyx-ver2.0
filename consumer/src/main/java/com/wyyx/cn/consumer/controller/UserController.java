@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.time.ZoneId;
 import java.util.Date;
 
 /**
@@ -50,7 +51,7 @@ public class UserController {
     @Autowired
     private WxLogin wxLogin;
 
-    @Reference
+    @Reference(check = false)
     private UserService userService;
 
     /**
@@ -212,13 +213,14 @@ public class UserController {
     public ReturnResult Register(@Valid UserVo userVo, HttpServletRequest request) {
 
         if (userVo.getAgree() != null) {
-            boolean isExit = null == redisUtils.get(UserContants.LOGIN_NAME_SPACE + userVo.getUserName()) ? false : true;
-            if (!isExit) {
+//            boolean isExit = null == redisUtils.get(UserContants.LOGIN_NAME_SPACE + userVo.getUserName()) ? false : true;
+            boolean isExit=false;
+            if (! isExit) {
                 User user = new User();
                 user.setUserName(userVo.getUserName());
                 user.setUserPassword(userVo.getUserPassword());
                 user.setUserPhone(userVo.getUserPhone());
-                user.setBirthday(userVo.getBirthday());
+                user.setBirthday( userVo.getBirthday());
                 user.setSex(userVo.getSex());
                 Date date = new Date();
                 user.setCreateTime(date);
